@@ -8,7 +8,9 @@ jobs:
       - setup_remote_docker
       - run:
           name: Docker build
-          command: docker build -t marcboudreau/dumb-server:$(sed -e "s/-0$/-$CIRCLE_BUILD_NUM/" version.txt) .
+          command: |
+            docker build -t marcboudreau/dumb-server:$(sed -e "s/-0$/-$CIRCLE_BUILD_NUM/" version.txt) \
+                         -t marcboudreau/dumb-server:latest .
       - run:
           name: Docker Login
           command: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
@@ -16,7 +18,7 @@ jobs:
           name: Push to Docker
           command: |
             if [[ $CIRCLE_BRANCH == master ]]; then
-              docker tag marcboudreau/dumbserver:$(sed -e "s/-0$/-$CIRCLE_BUILD_NUM/" version.txt) marcboudreau/dumb-server:latest
+              docker push marcboudreau/dumb-server:latest
             fi
 
-            docker push marcboudreau/dumb-server
+            docker push marcboudreau/dumbserver:$(sed -e "s/-0$/-$CIRCLE_BUILD_NUM/" version.txt)
