@@ -1,0 +1,21 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: docker:17.11.0-ce
+    steps:
+      - checkout
+      - run:
+          name: Docker build
+          command: docker build -t marcboudreau/dumb-server:$(sed "-0$/-$CIRCLE_BUILDNUM/") .
+      - run:
+          name: Docker Login
+          command: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      - run:
+          name: Push to Docker
+          command: |
+            if [[ $CIRCLE_BRANCH == master ]]; then
+              docker tag marcboudreau/dumbserver:$(sed "-0$/-$CIRCLE_BUILDNUM/") marcboudreau/dumb-server:latest
+            fi
+
+            docker push marcboudreau/dumb-server
