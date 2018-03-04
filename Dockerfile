@@ -7,6 +7,9 @@ WORKDIR /go/src/app
 COPY . .
 
 RUN go get -v -d ./...
+
+RUN go test -v ./...
+
 RUN go install -v ./...
 
 FROM alpine:latest
