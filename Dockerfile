@@ -17,8 +17,12 @@ RUN addgroup -g 1001 dumbsrvr && adduser -S -u 1001 dumbsrvr -g dumbsrvr dumbsrv
 
 COPY --chown=dumbsrvr:dumbsrvr --from=0 /go/bin/app /usr/bin/app
 
+COPY docker-entrypoint.sh /usr/bin/docker-entrypoint.sh
+
 USER dumbsrvr
 
 EXPOSE 7979
+
+ENTRYPOINT [ "/usr/bin/docker-entrypoint.sh" ]
 
 CMD [ "app" ]
