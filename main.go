@@ -26,11 +26,12 @@ func main() {
 
 	var response io.Reader
 	if *responseFile != "" {
-		response, err := os.Open(*responseFile)
+		file, err := os.Open(*responseFile)
 		if err != nil {
 			log.Fatal(err)
 		}
-		defer response.Close()
+		defer file.Close()
+		response = io.Reader(file)
 	} else {
 		response = strings.NewReader(defaultResponse)
 	}
